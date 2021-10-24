@@ -1,0 +1,104 @@
+{% extends 'dashboard/base.html' %}
+
+{% block MainContent %}
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-11">
+                            Filter
+                        </div>
+                        <div class="col-1">
+                            <a href="{% url 'dd_mainDash' %}">
+                                <i class="tim-icons icon-refresh-01"> Reset</i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <form action="#" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-3 px-md-1 mt-1">
+                                <select class="form-control" name="category">
+                                    <option class="form-control" value="patient_name" style="color: black" selected>
+                                        Patient Name
+                                    </option>
+                                    <option class="form-control" value="purpose" style="color: black">
+                                        Purpose
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-7 px-md-1 mt-1">
+                                <input type="text" class="form-control" placeholder="Ex: Joe, or Stomachache"
+                                       name="search_term">
+                            </div>
+                            <div class="col-md-2 px-md-1">
+                                <input type="submit" value="Search" class="btn btn-fill btn-info">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card ">
+                <div class="card-header">
+                    <h4 class="card-title">Your Incomplete Appointments Today</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table tablesorter " id="">
+                            <thead class=" text-primary">
+                            <tr>
+                                <th>
+                                    Visit ID
+                                </th>
+                                <th>
+                                    Time
+                                </th>
+                                <th>
+                                    Patient Name
+                                </th>
+                                <th class="text-center">
+                                    Purpose
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for visit in visits %}
+                            <tr>
+                                <td>
+                                    {{ visit.id }}
+                                </td>
+                                <td>
+                                    {{ visit.date_time.time }}
+                                </td>
+                                <td>
+                                    <a href="{% url 'medical_profile' patient_id=visit.patient.id %}" target="_blank">{{ visit.patient.first_name }} {{ visit.patient.last_name }}</a>
+                                </td>
+                                <td class="text-center">
+                                    <p>"{{ visit.purpose }}"</p>
+                                </td>
+                                <td>
+                                    <a href="{% url 'visit_filling' visit_id=visit.id %}" class="btn btn-fill btn-primary">Attend</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
